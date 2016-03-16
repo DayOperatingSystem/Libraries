@@ -4,10 +4,10 @@
 
 pid_t getpid()
 {
-	return syscall(SYSCALL_GET_PID);
+	return syscall1(SYSCALL_GET_PID, 0);
 }
 
 pid_t getppid()
 {
-	return syscall(SYSCALL_GET_PARENT_PID);
+	return syscall1(SYSCALL_GET_PARENT_PID, 0);
 }

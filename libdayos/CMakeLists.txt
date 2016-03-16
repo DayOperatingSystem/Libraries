@@ -41,6 +41,7 @@ set(SOURCES
 	src/utsname.c
 	src/vfs.c
 	src/wait.c
+	src/getpid.c
 
     ${HEADERS}
 )

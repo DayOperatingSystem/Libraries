@@ -8,6 +8,7 @@
 #include <driver.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <stdarg.h>
 
 #include <dayos.h>
@@ -673,7 +674,7 @@ char* tmpnam(char* str)
 {
 	if (str == NULL)
 	{
-		snprintf(tmpnam_buf, L_tmpnam, "tmpname%d", tmpnam_num);
+		snprintf(tmpnam_buf, L_tmpnam, "tmpname%d%d", getpid(), tmpnam_num);
 		return tmpnam_buf;
 	}
 

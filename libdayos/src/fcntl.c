@@ -12,7 +12,7 @@ static FILE** vector_array = NULL;
 
 int fcntl(int fd, int cmd, ...)
 {
-	
+	DSTUB;
 }
 
 int open(const char *pathname, int flags, ...)
@@ -93,4 +93,10 @@ FILE* fd2file(int fd)
 		return NULL;
 
 	return vector_array[fd];
+}
+
+int isatty(int fd)
+{
+	DSTUB;
+	return 1;
 }

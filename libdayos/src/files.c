@@ -105,6 +105,8 @@ FILE* fopen(const char* filename, const char* mode)
 			free(f);
 			return NULL;
 		}
+
+		vfile->nid = fs_req->id;
 	}
 
 	if(intmode & VFS_MODE_RO)
@@ -304,8 +306,10 @@ size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream)
 	else
 		msg.signal = DEVICE_READ;
 
-	msg.size = size * nmemb;
+	rq->size = size * nmemb;
+	msg.size = size * nmemb; // FIXME: WRONG!
 
+	rq->id = stream->native_file.nid;
 	rq->param = stream->buffer_mode;
 	rq->offset = stream->native_file.offset;
 	strcpy(rq->path, stream->native_file.path);
@@ -526,8 +530,10 @@ size_t fwrite(const void* ptr, size_t size, size_t count, FILE* stream)
 	else
 		msg.signal = DEVICE_WRITE;
 
-	msg.size = size * count;
+	rq->size = size * count;
+	msg.size = size * count; // FIXME: WRONG!
 
+	rq->id = stream->native_file.nid;
 	rq->offset = stream->native_file.offset;
 	strcpy(rq->path, stream->native_file.path);
 	send_message(&msg, stream->native_file.device);
@@ -681,4 +687,16 @@ char* tmpnam(char* str)
 	strncpy(tmpnam_buf, str, L_tmpnam);
 	snprintf(str, L_tmpnam, "%s%d", tmpnam_buf, tmpnam_num);
 	return str;
+}
+
+int chdir(const char* path)
+{
+	DSTUB;
+	return -1;
+}
+
+int rmdir(const char* path)
+{
+	DSTUB;
+	return -1;
 }

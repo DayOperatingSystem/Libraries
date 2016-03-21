@@ -26,6 +26,10 @@ long sysconf(int name);
 pid_t getpid();
 pid_t getppid();
 
+int chdir(const char* path);
+int rmdir(const char* path);
+int isatty(int fd);
+
 #ifdef __cplusplus
 }
 #endif

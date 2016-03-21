@@ -9,6 +9,9 @@
 #include "sleep.h"
 #include "buffer.h"
 
+#include <unistd.h>
+#define DSTUB { debug_printf("[ LIBDAYOS ] Library stub '%s' in process %d\n", __func__, getpid()); }
+
 #ifdef __cplusplus
 extern "C" {
 #endif

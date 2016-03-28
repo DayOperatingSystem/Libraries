@@ -48,10 +48,10 @@ set(SOURCES
 
 enable_language(C ASM)
 
-set(CMAKE_C_FLAGS "-m32 -Wall -g -fstack-protector-all -nostdinc -nodefaultlibs -pedantic-errors -fno-builtin -D__dayos__")
+set(CMAKE_C_FLAGS "-m32 -Wall -g -fstack-protector-all -nostdinc -nodefaultlibs -pedantic-errors -D__dayos__")
 set(CMAKE_ASM_FLAGS "-m32 -Wall -g -pedantic-errors")
 
-include_directories("include" ${LIBDAYOS_INCLUDE})
+include_directories("include" ${LIBDAYOS_INCLUDE} "../libmath")
 add_library(dayos STATIC ${SOURCES} ${ASM_SOURCES} ${HEADERS})
 
 # Tests

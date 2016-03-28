@@ -1,7 +1,7 @@
 set(SOURCES
 	src/IODevice.cpp
 	src/HIDDevice.cpp
-	src/CharDevice.cpp src/BlockDevice.cpp include/BlockDevice.h include/FileSystem.cpp include/FileSystem.h)
+	src/CharDevice.cpp src/BlockDevice.cpp include/BlockDevice.h src/FileSystem.cpp include/FileSystem.h)
 
 set(HEADERS 
 	include/IODevice.h

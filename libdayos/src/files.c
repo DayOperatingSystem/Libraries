@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <math.h>
 
 #include <dayos.h>
 
@@ -394,6 +395,35 @@ static int fputn(unsigned int x, int base, FILE* stream)
 	return fputs(p, stream);
 }
 
+static int fputf(double num, FILE* stream)
+{
+	size_t count = 0;
+	int m = floor(log10(num));
+	double tolerance = 0.0000001;
+	int digit = 0;
+
+	while(num > (0 + tolerance) || (m >= 0))
+	{
+		double weight = pow(10.0f, m);
+		digit = floor(num / weight);
+		num -= ((double) digit * weight);
+		fputc('0' + digit, stream);
+		if (m == 0)
+			fputc('.', stream);
+
+		m--;
+		count++;
+	}
+
+	// If we printed something like "0.", append one zero
+	if(count <= 2)
+	{
+		fputc('0', stream);
+		count++;
+	}
+	return count;
+}
+
 int vfprintf(FILE* stream, const char* fmt, va_list ap)
 {
 	if(!stream || !fmt)
@@ -401,6 +431,7 @@ int vfprintf(FILE* stream, const char* fmt, va_list ap)
 	
 	const char* s;
 	unsigned long n;
+	float d;
 	unsigned int ret = 0;
 
 	while (*fmt) 
@@ -439,12 +470,17 @@ int vfprintf(FILE* stream, const char* fmt, va_list ap)
 							break;
 					}
 					break;
+				case 'f':
+					d = va_arg(ap, double);
+					ret += fputf(d, stream);
+					break;
 				case '%':
 					fputc('%', stream);
 					ret++;
 					break;
 				case '\0':
 					goto out;
+
 				default:
 					fputc('%', stream);
 					fputc(*fmt, stream);
@@ -457,6 +493,7 @@ int vfprintf(FILE* stream, const char* fmt, va_list ap)
 			fputc(*fmt, stream);
 			ret++;
 		}
+
 		fmt++;
 	}
 

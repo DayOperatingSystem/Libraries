@@ -1,69 +1,41 @@
 #include "math.h"
 
+#define EULER 2.718281828459045235360287471352662497
+
 double floor(double x)
 {
-	return __builtin_floor(x);
-}
-
-double fmod(double x, double y)
-{
-	return __builtin_fmod(x,y);
+	/// FIXME: Real implementation!
+	return ((long) x);
 }
 
 double pow(double b, double e)
 {
-	return __builtin_pow(b, e);
+	return exp(log(b) * e);
 }
 
-double sin(double x)
+double logn(double x, double b)
 {
-	return __builtin_sin(x);
-}
-
-double cos(double x)
-{
-	return __builtin_cos(x);
-}
-
-double tan(double x)
-{
-	return __builtin_tan(x);
-}
-
-double asin(double x)
-{
-	return __builtin_asin(x);
-}
-
-double acos(double x)
-{
-	return __builtin_acos(x);
-}
-
-double atan2(double x, double y)
-{
-	return __builtin_atan2(x, y);
-}
-
-double sqrt(double x)
-{
-	return __builtin_sqrt(x);
-}
-
-double log(double x)
-{
-	return __builtin_log(x);
+	return log(x) / log(b);
 }
 
 double log10(double x)
 {
-	return __builtin_log10(x);
+	return log(x) / 2.302585092994045684017991454684364207601101488628772976033; // log(x) / log(10)
 }
 
 double exp(double x)
 {
-	return __builtin_exp(x);
-}
+	if(x == 0.0) return 1.0;
+	if(x == 1.0) return EULER;
+
+	const unsigned int iterations = 100;
+	double sum = 1.0f;
+	for(int i = iterations; i > 0; i--)
+		sum = 1.0 + x * sum / (double) i;
+
+	return sum;}
+
+
 
 double ldexp(double x, int exp)
 {
@@ -79,12 +51,6 @@ double frexp(double x, int* exp)
 {
 	return __builtin_frexp(x, exp);
 }
-
-/*long long __udivdi3(long long a, long long b)
-{
-	return 0;
-	//return __builtin_udivdi3(a, b);
-}*/
 
 double atan(double x)
 {
@@ -124,4 +90,28 @@ double trunc(double x)
 float truncf(float x)
 {
 	return __builtin_truncf(x);
+}
+
+double fmod(double x, double y)
+{
+	return __builtin_fmod(x,y);
+}
+
+double tan(double x)
+{
+	return __builtin_tan(x);
+}
+
+double asin(double x)
+{
+	return __builtin_asin(x);
+}
+double acos(double x)
+{
+	return __builtin_acos(x);
+}
+
+double atan2(double x, double y)
+{
+	return __builtin_atan2(x, y);
 }

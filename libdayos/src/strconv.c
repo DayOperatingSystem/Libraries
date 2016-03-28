@@ -43,7 +43,7 @@ int atoi(const char* str)
 
 float atof(const char* str)
 {
-	//return __builtin_atof(str);
+
 }
 
 long atol(const char* str)

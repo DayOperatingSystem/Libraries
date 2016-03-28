@@ -23,6 +23,9 @@ double ceil(double x);
 double sqrt(double x);
 double log(double x);
 double log10(double x);
+double logn(double x, double b);
+double log2(double x);
+
 double exp(double x);
 double ldexp(double x, int exp);
 

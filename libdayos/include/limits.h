@@ -30,7 +30,10 @@
 
 #define INTMAX_MIN 0
 #define INTMAX_MAX 0
+
+#ifndef UINTMAX_MAX
 #define UINTMAX_MAX 2e64
+#endif
 
 #define UINT32_C unsigned int
 

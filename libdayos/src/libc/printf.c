@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
 
 void debug_putch(int c)

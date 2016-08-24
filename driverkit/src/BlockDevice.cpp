@@ -1,12 +1,12 @@
 #include "BlockDevice.h"
 #include <sys/stat.h>
-#include <driver.h>
+#include <vfs.h>
 
 bool IO::BlockDevice::handle(message_t& msg)
 {
 	switch(msg.signal)
 	{
-		case DEVICE_READ:
+		case VFS_SIGNAL_READ:
 		{
 			struct vfs_request* request = (struct vfs_request*) &msg.message;
 			pid_t sender = msg.sender;
@@ -42,10 +42,10 @@ bool IO::BlockDevice::handle(message_t& msg)
 		}
 		return true;
 
-		case DEVICE_WRITE:
+		case VFS_SIGNAL_WRITE:
 			return true;
 
-		case FS_SIGNAL_STAT:
+		case VFS_SIGNAL_STAT:
 		{
 			struct stat* stat = (struct stat*)&msg.message;
 

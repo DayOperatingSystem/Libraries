@@ -2,8 +2,7 @@
 #define STDIO_H
 
 #include <stdarg.h>
-#include <vfs.h>
-#include "buffer.h"
+#include <dayos/vfs.h>
 #include <sys/stat.h>
 
 typedef struct
@@ -110,9 +109,9 @@ extern FILE* stderr;
 
 #define EOF (-1)
 
-#define _IOFBF 0
-#define _IOLBF 1
-#define _IONBF 2
+#define _IOFBF (VFS_BLOCK_BUFFER)
+#define _IOLBF (VFS_LINE_BUFFER)
+#define _IONBF (VFS_NO_BUFFER)
 
 #define BUFSIZ (MESSAGE_STRING_SIZE - 1)
 

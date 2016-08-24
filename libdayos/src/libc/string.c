@@ -87,7 +87,7 @@ char *strncat(char *src1, const char *src2, size_t n)
 	return src1;
 }
 
-#include <dayos.h>
+#include <dayos/dayos.h>
 
 int strncmp(const char *str1, const char *str2, size_t n)
 {

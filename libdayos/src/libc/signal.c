@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
 
 typedef void (*sig_func)(int);

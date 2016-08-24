@@ -1,30 +1,33 @@
 #include <CharDevice.h>
-#include <dayos.h>
 #include <sys/stat.h>
-#include <driver.h>
+#include <vfs.h>
 
 bool IO::CharDevice::handle(message_t& msg)
 {
 	switch (msg.signal)
 	{
-		case DEVICE_READ:
+		case VFS_SIGNAL_READ:
 		{
+			struct vfs_request* req = (struct vfs_request*) &msg.message;
+
 			// FIXME: ONLY SUPPORTS LINE BUFFERING FOR NOW!
-			m_currentRequests.push_front(ReadRequest(msg.sender, msg.size, true));
+			m_currentRequests.push_front(ReadRequest(msg.sender, req->size, true));
 			return true;
 		}
 		break;
 
-		case DEVICE_WRITE:
+		case VFS_SIGNAL_WRITE:
 		{
-			char* data = new char[msg.size];
-			read_message_stream(data, msg.size, msg.sender);
-			write(data, msg.size);
+			struct vfs_request* req = (struct vfs_request*) &msg.message;
+			
+			char* data = new char[req->size];
+			read_message_stream(data, req->size, msg.sender);
+			write(data, req->size);
 			delete[] data;
 			return true;
 		}
 
-		case FS_SIGNAL_STAT:
+		case VFS_SIGNAL_STAT:
 		{
 			struct stat* stat = (struct stat*) &msg.message;
 

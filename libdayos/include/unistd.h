@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stddef.h"
 #include "fcntl.h"
-#include "message.h"
+#include "dayos/message.h"
 
 #define STDIN_FILENO 0
 #define STDOUT_FILENO 1

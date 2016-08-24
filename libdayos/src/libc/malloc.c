@@ -1,5 +1,5 @@
 #include <malloc.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <string.h>
 #include <stdio.h>
 

@@ -1,7 +1,7 @@
 #ifndef __UTSNAME_H
 #define __UTSNAME_H
 
-#include <message.h>
+#include <dayos/message.h>
 
 struct utsname
 {

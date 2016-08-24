@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
 
 pid_t getpid()

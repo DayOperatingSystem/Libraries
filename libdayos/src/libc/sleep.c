@@ -1,5 +1,5 @@
 #include <sleep.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
 
 void sleep(unsigned int time)

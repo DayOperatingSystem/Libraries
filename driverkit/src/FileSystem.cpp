@@ -17,7 +17,7 @@ bool IO::FileSystem::handle(message_t& msg)
 	vfs_request* rq = (vfs_request*) &msg.message;
 	switch (msg.signal)
 	{
-		case FS_SIGNAL_OPEN:
+		case VFS_SIGNAL_OPEN:
 		{
 			if(rq->id = open(rq->path, (VFS_OPEN_MODES) rq->mode) != -1)
 				msg.signal = SIGNAL_FAIL;
@@ -28,7 +28,7 @@ bool IO::FileSystem::handle(message_t& msg)
 		}
 		break;
 
-		case FS_SIGNAL_STAT:
+		case VFS_SIGNAL_STAT:
 		{
 			struct stat* st = (struct stat*) &msg.message;
 			if(!fstat(rq->id, st))
@@ -45,7 +45,7 @@ bool IO::FileSystem::handle(message_t& msg)
 		}
 			break;
 
-		case FS_SIGNAL_READ:
+		case VFS_SIGNAL_READ:
 		{
 			size_t sz = 0;
 			char* buffer = new char[sz];
@@ -62,7 +62,7 @@ bool IO::FileSystem::handle(message_t& msg)
 		}
 		break;
 
-		case FS_SIGNAL_WRITE:
+		case VFS_SIGNAL_WRITE:
 		{
 			char* buffer = new char[msg.size];
 			pid_t sender = msg.sender;
@@ -74,7 +74,7 @@ bool IO::FileSystem::handle(message_t& msg)
 		}
 		break;
 
-		case FS_SIGNAL_OPEN_DIR:
+		case VFS_SIGNAL_OPEN_DIR:
 		{
 
 		}

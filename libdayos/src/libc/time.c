@@ -1,7 +1,7 @@
 #include <time.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
-#include <dayos.h>
+#include <dayos/dayos.h>
 
 // FIXME: Implementation!
 clock_t clock()

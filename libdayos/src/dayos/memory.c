@@ -1,6 +1,6 @@
 #include <arch.h>
-#include <memory.h>
-#include <syscall.h>
+#include <dayos/memory.h>
+#include <dayos/syscall.h>
 
 void request_mem_region(const char* name, uintptr_t addr, size_t sz)
 {

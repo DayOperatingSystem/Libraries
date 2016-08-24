@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <time.h>
 
-#include <vfs.h>
+#include <dayos/vfs.h>
 
 struct stat
 {

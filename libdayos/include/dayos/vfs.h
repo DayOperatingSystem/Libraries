@@ -18,7 +18,11 @@ typedef enum
 	VFS_SIGNAL_MOUNT_DEVICE = 2,
 	VFS_SIGNAL_MOUNT_RAMDISK = 3,
 	VFS_SIGNAL_OPEN_DIR = 4,
-	VFS_SIGNAL_READ_DIR = 5
+	VFS_SIGNAL_READ_DIR = 5,
+	VFS_SIGNAL_READ = 6,
+	VFS_SIGNAL_WRITE = 7,
+	VFS_SIGNAL_STAT = 8,
+	VFS_SIGNAL_IOCTL = 9
 } VFS_SIGNALS;
 
 typedef enum
@@ -32,6 +36,13 @@ typedef enum
 	VFS_LINK = 32,
 	VFS_SOCKET = 64
 } DEVICE_TYPES;
+
+typedef enum
+{
+	VFS_LINE_BUFFER = 0,
+	VFS_BLOCK_BUFFER = 1,
+	VFS_NO_BUFFER = 2
+} VFS_BUFFER_MODES;
 
 #include <sys/types.h>
 #include <stdint.h>
@@ -74,6 +85,35 @@ extern "C" {
 
 // Forward declaration of stat
 struct stat;
+
+/**
+ * @brief Opens an existing file or creates a new one if it doesn't exist.
+ * 
+ * @param path The filepath to open.
+ * @param mode The mode to request.
+ */
+struct vfs_file* vfs_open(const char* path, VFS_OPEN_MODES mode);
+
+/**
+ * @brief A fread version that operations on DayOS native files.
+ * 
+ * @param file The file to read from.
+ * @param data The data memory to read to.
+ * @param size The size of the data to read.
+ * @param buffermode The intended buffer mode.
+ * @return The size in bytes that was actually read.
+ */
+size_t vfs_read(struct vfs_file* file, void* data, size_t size, VFS_BUFFER_MODES buffermode);
+
+/**
+ * @brief A fwrite version that operations on DayOS native files.
+ * 
+ * @param file The file to write to.
+ * @param data The data to write.
+ * @param size The size of the data to read.
+ * @return The size in bytes that was actually written.
+ */
+size_t vfs_write(struct vfs_file* file, const void* data, size_t size);
 
 /**
  * @brief Creates a device descriptor in the VFS that can be opened for reading

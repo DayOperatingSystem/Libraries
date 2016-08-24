@@ -1,5 +1,5 @@
 #include <sys/utsname.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <string.h>
 #include <arch.h>
 

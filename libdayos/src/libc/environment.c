@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <dayos.h>
+#include <dayos/dayos.h>
 #include <string.h>
 
 static size_t environ_size = 0;

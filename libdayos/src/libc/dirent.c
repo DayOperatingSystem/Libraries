@@ -1,10 +1,10 @@
 #include <dirent.h>
-#include <message.h>
+#include <dayos/message.h>
 #include <stdlib.h>
-#include <dayos.h>
+#include <dayos/dayos.h>
 #include <errno.h>
 #include <string.h>
-#include <driver.h>
+#include <dayos/driver.h>
 
 int closedir(DIR* dir)
 {
@@ -64,7 +64,7 @@ DIR* opendir(const char* path)
 		message_t mountmsg;
 		struct vfs_file* fs_file = (struct vfs_file*) &mountmsg.message;
 		struct vfs_request* fs_req = (struct vfs_request*) &mountmsg.message;
-		mountmsg.signal = FS_SIGNAL_OPEN_DIR;
+		mountmsg.signal = VFS_SIGNAL_OPEN_DIR;
 		strcpy(fs_req->path, vfile->path);
 
 		send_message(&mountmsg, vfile->device);

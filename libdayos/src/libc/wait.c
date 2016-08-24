@@ -1,6 +1,6 @@
 #include <sys/wait.h>
-#include <syscall.h>
-#include <dayos.h>
+#include <dayos/syscall.h>
+#include <dayos/dayos.h>
 
 pid_t wait(int* status)
 {

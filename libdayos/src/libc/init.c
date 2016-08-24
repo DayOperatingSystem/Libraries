@@ -1,7 +1,7 @@
-#include <dayos.h>
+#include <dayos/dayos.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <string.h>
 #include <fcntl.h>
 

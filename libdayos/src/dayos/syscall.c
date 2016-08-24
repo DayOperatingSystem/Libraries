@@ -1,4 +1,4 @@
-#include <syscall.h>
+#include <dayos/syscall.h>
 #include <arch.h>
 
 inline int syscall1(int syscall, int ebx)

@@ -2,46 +2,45 @@ file(GLOB_RECURSE HEADERS *.h)
 #file(GLOB_RECURSE SOURCES *.c*)
 #file(GLOB_RECURSE ASM_SOURCES *.S)
 
-set(ASM_SOURCES src/signal-IA32.S)
+set(ASM_SOURCES src/libc/signal-IA32.S)
 set(SOURCES
-	src/assert.c
-	src/buffer.c
-	src/ctype.c
-	src/dirent.c
-	src/div.c
-	src/dlfcn.c
-	src/dlmalloc.c
-	src/environment.c
-	src/errno.c
-	src/exec.c
-	src/exit.c
-	src/fcntl.c
-	src/files.c
-	src/init.c
-	src/interrupts.c
-	src/ioctl.c
-	src/locale.c
-	src/malloc.c
-	src/memory.c
-	src/message.c
-	src/optarg.c
-	src/printf.c
-	src/pthread.c
-	src/rand.c
-	src/service.c
-	src/setjmp.c
-	src/signal.c
-	src/sleep.c
-	src/stack.c
-	src/stat.c
-	src/strconv.c
-	src/string.c
-	src/syscall.c
-	src/time.c
-	src/utsname.c
-	src/vfs.c
-	src/wait.c
-	src/getpid.c
+	src/libc/assert.c
+	src/libc/ctype.c
+	src/libc/dirent.c
+	src/libc/div.c
+	src/libc/dlfcn.c
+	src/libc/dlmalloc.c
+	src/libc/environment.c
+	src/libc/errno.c
+	src/libc/exec.c
+	src/libc/exit.c
+	src/libc/fcntl.c
+	src/libc/files.c
+	src/libc/init.c
+	src/dayos/interrupts.c
+	src/libc/ioctl.c
+	src/libc/locale.c
+	src/libc/malloc.c
+	src/dayos/memory.c
+	src/dayos/message.c
+	src/libc/optarg.c
+	src/libc/printf.c
+	src/libc/pthread.c
+	src/libc/rand.c
+	src/dayos/service.c
+	src/libc/setjmp.c
+	src/libc/signal.c
+	src/libc/sleep.c
+	src/libc/stack.c
+	src/libc/stat.c
+	src/libc/strconv.c
+	src/libc/string.c
+	src/dayos/syscall.c
+	src/libc/time.c
+	src/libc/utsname.c
+	src/dayos/vfs.c
+	src/libc/wait.c
+	src/libc/getpid.c
 
     ${HEADERS}
 )

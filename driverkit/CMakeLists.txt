@@ -13,5 +13,5 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -fstack-protector-all -pedantic-er
 add_library(DriverKit STATIC ${SOURCES})
 add_executable(dktest.elf tests/main.cpp)
 
-include_directories("include" ${DAYOS_KERNEL_INCLUDE})
+include_directories("include" ${DAYOS_KERNEL_INCLUDE} ${LIBDAYOS_INCLUDE})
 target_link_libraries(dktest.elf dayos m DriverKit)

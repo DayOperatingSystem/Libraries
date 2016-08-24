@@ -1,7 +1,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <dayos.h>
+#include <dayos/dayos.h>
 
 static const int vector_alloc_step = 16; 
 static int vector_size = 0;

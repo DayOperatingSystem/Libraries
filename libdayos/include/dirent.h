@@ -2,7 +2,7 @@
 #define __DIRENT_H
 
 #include <sys/types.h>
-#include <vfs.h>
+#include <dayos/vfs.h>
 
 struct dirent 
 {

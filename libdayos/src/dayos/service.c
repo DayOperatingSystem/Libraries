@@ -1,5 +1,5 @@
-#include <service.h>
-#include <message.h>
+#include <dayos/service.h>
+#include <dayos/message.h>
 #include <string.h>
 #include <sleep.h>
 

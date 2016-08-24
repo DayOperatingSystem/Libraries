@@ -1,5 +1,5 @@
-#include <message.h>
-#include <syscall.h>
+#include <dayos/message.h>
+#include <dayos/syscall.h>
 #include <sleep.h>
 #include <string.h>
 #include <arch.h>
@@ -35,7 +35,7 @@ int receive_message_timeout(message_t* msg, pid_t who, uint32_t tries, uint32_t 
 	return MESSAGE_ERR_RECEIVE;
 }
 
-#include <dayos.h>
+#include <dayos/dayos.h>
 
 #define RECEIVE(msg, pid) while(receive_message(&msg, pid) != MESSAGE_RECEIVED) sleep(1);
 

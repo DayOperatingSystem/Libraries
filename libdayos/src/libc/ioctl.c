@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdarg.h>
-#include <dayos.h>
-#include <driver.h>
+#include <dayos/dayos.h>
+#include <dayos/vfs.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -24,7 +24,7 @@ int ioctl(int d, int request, ...)
 	num = va_arg(ap, int);
 
 	// Send ioctl command
-	msg.signal = DEVICE_IOCTL;
+	msg.signal = VFS_SIGNAL_IOCTL;
 	msg.size = request;
 	send_message(&msg, pid);
 

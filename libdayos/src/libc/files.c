@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <string.h>
-#include <service.h>
-#include <message.h>
+#include <dayos/service.h>
+#include <dayos/message.h>
 #include <stdlib.h>
-#include <vfs.h>
+#include <dayos/vfs.h>
 #include <sleep.h>
-#include <driver.h>
+#include <dayos/driver.h>
 #include <errno.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdarg.h>
 #include <math.h>
 
-#include <dayos.h>
+#include <dayos/dayos.h>
 
 #define TIMEOUT 10
 
@@ -37,7 +37,7 @@ FILE* fopen(const char* filename, const char* mode)
 
 	message_t msg;
 	struct vfs_request* request = (struct vfs_request*)msg.message;
-	struct vfs_file* vfile = (struct vfs_file*)msg.message;
+	struct vfs_file* vfile;// = (struct vfs_file*)msg.message;
 
 	pid_t pid = get_service_pid("vfs");
 
@@ -65,7 +65,7 @@ FILE* fopen(const char* filename, const char* mode)
 	}
 	
 	f->mode = intmode;
-	request->magic = VFS_MAGIC;
+	/*request->magic = VFS_MAGIC;
 
 	// FIXME: STRNCPY!
 	strcpy(request->path, filename);
@@ -92,7 +92,7 @@ FILE* fopen(const char* filename, const char* mode)
 	{
 		message_t mountmsg;
 		struct vfs_request* fs_req = (struct vfs_request*)&mountmsg.message;
-		mountmsg.signal = FS_SIGNAL_OPEN;
+		mountmsg.signal = VFS_SIGNAL_OPEN;
 		strcpy(fs_req->path, vfile->path);
 		fs_req->mode = intmode;
 
@@ -108,8 +108,12 @@ FILE* fopen(const char* filename, const char* mode)
 		}
 
 		vfile->nid = fs_req->id;
-	}
-
+	}*/
+	
+	vfile = vfs_open(filename, intmode);
+	if(!vfile)
+		return NULL;
+	
 	if(intmode & VFS_MODE_RO)
 	{
 		vfs_stat(vfile, &f->stat);
@@ -127,6 +131,8 @@ FILE* fopen(const char* filename, const char* mode)
 
 	setvbuf(f, NULL, _IOLBF, BUFSIZ);
 	errno = 0;
+	
+	free(vfile);
 	return f;
 }
 
@@ -294,31 +300,7 @@ int ungetc(int character, FILE* stream)
 
 size_t fread(void* ptr, size_t size, size_t nmemb, FILE* stream)
 {
-	if (!ptr || !size || !nmemb || !stream)
-	{
-		return 0;
-	}
-
-	message_t msg;
-	struct vfs_request* rq = (struct vfs_request*) &msg.message;
-
-	if (stream->native_file.type == VFS_MOUNTPOINT)
-		msg.signal = FS_SIGNAL_READ;
-	else
-		msg.signal = DEVICE_READ;
-
-	rq->size = size * nmemb;
-	msg.size = size * nmemb; // FIXME: WRONG!
-
-	rq->id = stream->native_file.nid;
-	rq->param = stream->buffer_mode;
-	rq->offset = stream->native_file.offset;
-	strcpy(rq->path, stream->native_file.path);
-	send_message(&msg, stream->native_file.device);
-
-	size_t sz = read_message_stream(ptr, msg.size, stream->native_file.device);
-	stream->native_file.offset += sz;
-	return sz;
+	return vfs_read(&stream->native_file, ptr, size * nmemb, stream->buffer_mode);
 }
 
 int fseek(FILE* stream, long int offset, int origin)
@@ -559,25 +541,7 @@ size_t fwrite(const void* ptr, size_t size, size_t count, FILE* stream)
 	if (!ptr || !size || !count || !stream)
 		return 0;
 
-	message_t msg;
-	struct vfs_request* rq = (struct vfs_request*) &msg.message;
-
-	if (stream->native_file.type == VFS_MOUNTPOINT)
-		msg.signal = FS_SIGNAL_WRITE;
-	else
-		msg.signal = DEVICE_WRITE;
-
-	rq->size = size * count;
-	msg.size = size * count; // FIXME: WRONG!
-
-	rq->id = stream->native_file.nid;
-	rq->offset = stream->native_file.offset;
-	strcpy(rq->path, stream->native_file.path);
-	send_message(&msg, stream->native_file.device);
-
-	size_t sz = write_message_stream(ptr, msg.size, stream->native_file.device);
-	stream->native_file.offset += sz;
-	return sz;
+	return vfs_write(&stream->native_file, ptr, size * count);
 }
 
 int fputs(const char* str, FILE* stream)

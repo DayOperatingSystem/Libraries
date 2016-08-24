@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <dayos.h>
+#include <dayos/dayos.h>
 #include <string.h>
 #include <unistd.h>
 #include "tinytest.h"
 
-#include "buffertest.c"
 #include "stringtest.c"
 
 // FIXME: Rather useless
@@ -65,7 +64,6 @@ int main(int argc, char* argv[])
 		"                           |___/                                     \n"
 		"\n\n");
 	
-	run_buffer_tests();
 	run_string_tests();
 	RUN(test_optargs);
 	//RUN(test_random);

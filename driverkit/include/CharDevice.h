@@ -24,6 +24,11 @@ class CharDevice : IODevice
 	
 	std::deque<ReadRequest> m_currentRequests;
 	std::vector<char> m_buffer;
+protected:
+	
+	pid_t getNextRequestPID() { return m_currentRequests.begin()->receiver; }
+	bool hasNextRequest() { return m_currentRequests.size() != 0; }
+	
 public:
 	virtual const char* getName() { return "Generic Character Device"; }
 	virtual unsigned int getType() { return 0; }

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <dayos/syscall.h>
+#include <dayos/dayos.h>
 #include <arch.h>
 
 typedef void (*sig_func)(int);
@@ -14,7 +15,7 @@ static const char* sig_to_name(int sig)
 {
 	switch(sig)
 	{
-		case SIGSEGV: return "SIGSEGV";		
+		case SIGSEGV: return "SIGSEGV";
 		case SIGINT: return "SIGINT";
 		case SIGILL: return "SIGILL";
 		case SIGFPE: return "SIGFPE";
@@ -32,7 +33,8 @@ void sig_term(int val)
 
 void sig_dfl(int val)
 {
-	printf("Received signal %d (%s) and will terminate!\n", val, sig_to_name(val));
+	// FIXME: For now. Sending messages crashes due to stack related issues.
+	debug_printf("[ LIBC ] Process %d received signal %d (%s) and will terminate!\n", getpid(), val, sig_to_name(val));
 	exit(val);
 }
 
@@ -69,22 +71,26 @@ void (*signal(int sig, void (*func)(int)))(int)
 	return signal_table[sig];
 }
 
-int raise(int sig)
+int kill(pid_t pid, int sig)
 {
-	return syscall2(12, sig, -1);
+	return syscall2(SYSCALL_SIGNAL_RAISE, sig, pid);
 }
 
-
-void c_os_signal_handler(int signal)
+int raise(int sig)
 {
-	if(signal < SIGNAL_TABLE_SIZE &&
-		signal >= 0 &&
-		signal_table[signal])
+	kill(sig, -1);
+}
+
+void c_os_signal_handler(int sig)
+{
+	if(sig < SIGNAL_TABLE_SIZE &&
+		sig >= 0 &&
+		signal_table[sig])
 	{
-		signal_table[signal](signal);
+		signal_table[sig](sig);
 	}
 	else
-		exit(-1);
+		sig_dfl(sig);
 }
 
 extern void os_signal_handler();

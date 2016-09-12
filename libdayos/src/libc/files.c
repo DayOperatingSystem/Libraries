@@ -564,7 +564,7 @@ char* fgets(char* str, int num, FILE* stream)
 
 	size_t i = 0;
 	char* iter = str;
-	while((*iter++ = fgetc(stdin)) != '\n' && i++ < num);
+	while((*iter++ = fgetc(stdin)) != '\n' && *iter != EOF && i++ < num);
 	*iter = 0;
 
 	return str;

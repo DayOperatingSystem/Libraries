@@ -4,6 +4,8 @@
 #include <string.h>
 #include <arch.h>
 
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
 int send_message(message_t* msg, uint32_t pid)
 {
 	if(msg == NULL)
@@ -47,10 +49,10 @@ int read_message_stream(void* data, size_t size, pid_t who)
 	// Get prolog
 	RECEIVE(msg, who);
 	if(msg.signal != SIGNAL_OK) return 0;
-
+	
 	// Be sure to only expect what can be taken and
 	// only what is going to be sent.
-	size = (size < msg.size) ? size : msg.size;
+	size = MIN(size, *((unsigned int*) &msg.message)); //(size < sent_size) ? size : sent_size;
 	
 	size_t received = 0;
 	while(received < size)
@@ -76,7 +78,10 @@ int write_message_stream(const char* data, size_t size, pid_t who)
 	size_t remaining_bytes = size % MESSAGE_STRING_SIZE;
 
 	msg.signal = SIGNAL_OK;
-	msg.size = size;
+	
+	msg.size = sizeof(unsigned int);
+	*((unsigned int*) &msg.message) = size;
+	
 	send_message(&msg, who);
 	
 	size_t sent = 0;

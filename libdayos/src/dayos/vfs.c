@@ -182,7 +182,6 @@ int vfs_mount_ramdisk(const char* dest, unsigned int mode)
 	return msg.signal;
 }
 
-#include <stdio.h>
 int vfs_stat(struct vfs_file* file, struct stat* stat)
 {
 	if(!file || !stat) return -1;
@@ -207,7 +206,68 @@ int vfs_stat(struct vfs_file* file, struct stat* stat)
 	return 0;
 }
 
-int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int num)
+struct vfs_file* vfs_opendir(const char* path)
+{
+	pid_t pid = get_service_pid("vfs");
+
+	if (pid == 0)
+	{
+		errno = ENOENT;
+		return NULL;
+	}
+
+	struct vfs_file* file = malloc(sizeof(struct vfs_file));
+	message_t* msg = malloc(sizeof(message_t));
+	struct vfs_request* request = (struct vfs_request*) msg->message;
+	struct vfs_file* msgfile = (struct vfs_file*) msg->message;
+
+	strncpy(request->path, path, sizeof(request->path));
+
+	msg->size = sizeof(struct vfs_request);
+	msg->signal = VFS_SIGNAL_OPEN_DIR;
+	send_message(msg, pid);
+	
+	if (receive_message_timeout(msg, pid, 100, 5) == MESSAGE_ERR_RECEIVE)
+	{
+		goto vfs_opendir_enoent;
+	}
+
+	if (msg->signal == SIGNAL_FAIL)
+	{
+		goto vfs_opendir_enoent;
+	}
+
+	*file = *msgfile;
+
+	// Tell the FS driver (in case of a mounted device)
+	if (msgfile->type == VFS_MOUNTPOINT)
+	{
+		msg->signal = VFS_SIGNAL_OPEN_DIR;
+		strcpy(request->path, file->path);
+
+		send_message(msg, file->device);
+
+		if (receive_message_timeout(msg, file->device, 100, 5) ==
+				MESSAGE_ERR_RECEIVE ||
+				msg->signal != SIGNAL_OK)
+		{
+			goto vfs_opendir_enoent;
+		}
+
+		file->nid = request->id;
+	}
+	
+	free(msg);
+	return file;
+	
+vfs_opendir_enoent:
+	errno = ENOENT;
+	free(file);
+	free(msg);
+	return NULL;
+}
+
+int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id)
 {
 	if(!dir || !dest)
 		return -1;
@@ -216,7 +276,7 @@ int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int num)
 	struct vfs_request* rq = (struct vfs_request*) &msg.message;
 	msg.signal = VFS_SIGNAL_READ_DIR;
 	
-	rq->param = num;
+	rq->param = id;
 	strcpy(rq->path, dir->path);
 	
 	send_message(&msg, dir->device);
@@ -229,4 +289,5 @@ int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int num)
 	
 	struct vfs_file* f = (struct vfs_file*) &msg.message;
 	*dest = *f;
+	return 0;
 }

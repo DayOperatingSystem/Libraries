@@ -28,6 +28,7 @@ typedef int sig_atomic_t;
 
 void (*signal(int sig, void (*func)(int)))(int);
 int raise(int sig);
+int kill(pid_t pid, int sig);
 
 #ifdef __cplusplus
 }

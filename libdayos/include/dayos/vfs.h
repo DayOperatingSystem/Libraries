@@ -75,6 +75,7 @@ struct vfs_file
 	uint32_t guid;
 	uint32_t uid;
 	ino_t nid;
+	ino_t child_nid; /// The node id of the first child if it is a directory, the next file in the directory if it is a file
 	size_t offset;
 	size_t size;
 };
@@ -128,7 +129,8 @@ int vfs_create_device(const char* path, unsigned int mode, unsigned int type);
 int vfs_mount_device(const char* src, const char* dest, const char* fsd, unsigned int mode);
 int vfs_mount_ramdisk(const char* dest, unsigned int mode);
 
-int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int num);
+struct vfs_file* vfs_opendir(const char* path);
+int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id);
 int vfs_stat(struct vfs_file* file, struct stat* stat);
 
 #ifdef __cplusplus

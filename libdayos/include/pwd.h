@@ -12,4 +12,14 @@ struct passwd
 	char* pw_shell;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct passwd* getpwnam(const char*);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

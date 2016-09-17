@@ -681,7 +681,7 @@ char* tmpnam(char* str)
 {
 	if (str == NULL)
 	{
-		snprintf(tmpnam_buf, L_tmpnam, "tmpname%d%d", getpid(), tmpnam_num);
+		snprintf(tmpnam_buf, L_tmpnam, P_tmpdir "%d%d", getpid(), tmpnam_num);
 		return tmpnam_buf;
 	}
 
@@ -690,14 +690,4 @@ char* tmpnam(char* str)
 	return str;
 }
 
-int chdir(const char* path)
-{
-	DSTUB;
-	return -1;
-}
 
-int rmdir(const char* path)
-{
-	DSTUB;
-	return -1;
-}

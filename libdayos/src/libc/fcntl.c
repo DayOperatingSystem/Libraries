@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <dayos/dayos.h>
 
 static const int vector_alloc_step = 16; 
@@ -99,4 +100,9 @@ int isatty(int fd)
 {
 	DSTUB;
 	return 1;
+}
+
+int access(const char* path, int mode)
+{
+	DSTUB;
 }

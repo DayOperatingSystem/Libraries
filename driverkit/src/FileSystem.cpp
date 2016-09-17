@@ -19,7 +19,7 @@ bool IO::FileSystem::handle(message_t& msg)
 	{
 		case VFS_SIGNAL_OPEN:
 		{
-			if(rq->id = open(rq->path, (VFS_OPEN_MODES) rq->mode) != -1)
+			if((rq->id = open(rq->path, (VFS_OPEN_MODES) rq->mode)) == 0)
 				msg.signal = SIGNAL_FAIL;
 			else
 				msg.signal = SIGNAL_OK;
@@ -48,27 +48,22 @@ bool IO::FileSystem::handle(message_t& msg)
 		case VFS_SIGNAL_READ:
 		{
 			size_t sz = 0;
-			char* buffer = new char[sz];
-			if((sz = read(rq->id, buffer, rq->offset, rq->size)) == 0)
+			if((sz = read(rq->id, msg.sender, rq->offset, rq->size)) == 0)
 			{
 				msg.signal = SIGNAL_FAIL;
 				send_message(&msg, msg.sender);
 				break;
 			}
-
-			sz = std::min((size_t) sz, (size_t) msg.size);
-			write_message_stream(buffer, sz, msg.sender);
-			delete[] buffer;
 		}
 		break;
 
 		case VFS_SIGNAL_WRITE:
 		{
-			char* buffer = new char[msg.size];
+			char* buffer = new char[rq->size];
 			pid_t sender = msg.sender;
 
 			read_message_stream(buffer, rq->size, msg.sender);
-			write(rq->id, buffer, rq->offset, msg.size);
+			write(rq->id, buffer, rq->offset, rq->size);
 
 			delete[] buffer;
 		}
@@ -83,6 +78,20 @@ bool IO::FileSystem::handle(message_t& msg)
 		case VFS_SIGNAL_READ_DIR:
 		{
 
+		}
+		break;
+		
+		case VFS_SIGNAL_CREATE_DIRECTORY:
+		{
+			msg.signal = SIGNAL_FAIL;
+			
+			rq->id = createDirectory(rq->path, (VFS_OPEN_MODES) rq->mode);
+			if(rq->id != 0)
+			{
+				msg.signal = SIGNAL_OK;
+			}
+			
+			send_message(&msg, msg.sender);
 		}
 		break;
 	}

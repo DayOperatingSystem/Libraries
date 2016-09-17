@@ -20,7 +20,7 @@ public:
 	
 	virtual file_handle_t open(const char* path, VFS_OPEN_MODES mode) = 0;
 	virtual void close(file_handle_t handle) = 0;
-	virtual size_t read(file_handle_t, void* data, size_t offset, size_t size) = 0;
+	virtual size_t read(file_handle_t, pid_t receiver, size_t offset, size_t size) = 0;
 	virtual size_t write(file_handle_t file, void* data, size_t offset, size_t size) = 0;
 	virtual bool remove(file_handle_t file) = 0;
 	virtual bool move(file_handle_t dir, const char* path) = 0;
@@ -29,7 +29,7 @@ public:
 	virtual file_handle_t opendir(const char* path) = 0;
 	virtual file_handle_t readdir(file_handle_t dir, size_t idx) = 0;
 	virtual bool removeDirectory(file_handle_t file) = 0;
-	virtual file_handle_t createDirectory(const char* path) = 0;
+	virtual file_handle_t createDirectory(const char* path, VFS_OPEN_MODES mode) = 0;
 
 	virtual void changeOwner(file_handle_t node, uid_t user) = 0;
 	virtual void changeMode(file_handle_t node, mode_t mode) = 0;

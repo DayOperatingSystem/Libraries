@@ -19,16 +19,18 @@ struct vfs_file* vfs_open(const char* path, VFS_OPEN_MODES mode)
 	}
 
 	struct vfs_file* file = malloc(sizeof(struct vfs_file));
+	
 	message_t* msg = malloc(sizeof(message_t));
 	struct vfs_request* request = (struct vfs_request*) msg->message;
 	struct vfs_file* msgfile = (struct vfs_file*) msg->message;
-
+	
 	strncpy(request->path, path, sizeof(request->path));
 	request->mode = mode;
 
 	msg->size = sizeof(struct vfs_request);
 	msg->signal = VFS_SIGNAL_OPEN;
 	send_message(msg, pid);
+	
 	if (receive_message_timeout(msg, pid, 100, 5) == MESSAGE_ERR_RECEIVE)
 	{
 		goto vfs_open_enoent;
@@ -190,6 +192,7 @@ int vfs_stat(struct vfs_file* file, struct stat* stat)
 	struct vfs_request* rq = (struct vfs_request*) &msg.message;
 	
 	msg.signal = VFS_SIGNAL_STAT;
+	rq->id = file->nid;
 	strcpy(rq->path, file->path);
 	
 	send_message(&msg, file->device);
@@ -290,4 +293,58 @@ int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id)
 	struct vfs_file* f = (struct vfs_file*) &msg.message;
 	*dest = *f;
 	return 0;
+}
+
+int vfs_mkdir(const char* path, VFS_ACCESS_MODES mode)
+{
+	message_t* msg = malloc(sizeof(message_t));
+	
+	struct vfs_request* rq = (struct vfs_request*) &msg->message;
+	struct vfs_file* msgfile = (struct vfs_file*) &msg->message;
+	
+	msg->signal = VFS_SIGNAL_CREATE_DIRECTORY;
+	rq->mode = mode;
+	
+	strncpy(rq->path, path, sizeof(rq->path));
+	
+	pid_t pid = get_service_pid("vfs");
+
+	if (pid == 0)
+	{
+		errno = ENOENT;
+		return NULL;
+	}
+	
+	send_message(msg, pid);
+	while(receive_message(msg, pid) != MESSAGE_RECEIVED) sleep(1);
+	
+	if(msg->signal != SIGNAL_OK)
+	{
+		free(msg);
+		return SIGNAL_FAIL;
+	}
+	
+	// Tell the FS driver (in case of a mounted device)
+	if (msgfile->type == VFS_MOUNTPOINT)
+	{
+		uint32_t device = msgfile->device;
+		msg->signal = VFS_SIGNAL_CREATE_DIRECTORY;
+		
+		memmove(rq->path, msgfile->path, strlen(msgfile->path));
+		rq->mode = mode;
+
+		send_message(msg, device);
+
+		if (receive_message_timeout(msg, device, 100, 5) ==
+				MESSAGE_ERR_RECEIVE ||
+				msg->signal != SIGNAL_OK)
+		{
+			free(msg);
+			errno = ENOENT;
+			return SIGNAL_FAIL;
+		}
+	}
+	
+	free(msg);
+	return SIGNAL_OK;
 }

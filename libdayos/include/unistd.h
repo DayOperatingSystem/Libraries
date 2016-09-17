@@ -11,6 +11,9 @@
 #define STDERR_FILENO 2
 
 #define F_OK SIGNAL_OK
+#define W_OK SIGNAL_OK
+#define X_OK SIGNAL_OK
+#define R_OK SIGNAL_OK
 
 #define _SC_CLK_TCK 0 // HACK!
 

@@ -57,4 +57,6 @@ typedef int intptr_t;
 
 #define UINTMAX_MAX UINT64_MAX
 
+#define SIZE_MAX (4294967295U)
+
 #endif

@@ -65,6 +65,7 @@ int fflush(FILE* stream);
 
 char* tmpnam(char* str);
 #define L_tmpnam 32
+#define P_tmpdir "tmpname"
 
 FILE* tmpfile();
 void clearerr(FILE* stream);

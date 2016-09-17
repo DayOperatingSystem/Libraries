@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include <dayos/dayos.h>
 #include <string.h>
 
@@ -45,4 +46,9 @@ int putenv(char* name)
 		environ[idx] = name;
 	
 	return 0;
+}
+
+char* getcwd(char* buf, size_t size)
+{
+	DSTUB;
 }

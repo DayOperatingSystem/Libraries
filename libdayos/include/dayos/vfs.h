@@ -22,7 +22,8 @@ typedef enum
 	VFS_SIGNAL_READ = 6,
 	VFS_SIGNAL_WRITE = 7,
 	VFS_SIGNAL_STAT = 8,
-	VFS_SIGNAL_IOCTL = 9
+	VFS_SIGNAL_IOCTL = 9,
+	VFS_SIGNAL_CREATE_DIRECTORY = 10
 } VFS_SIGNALS;
 
 typedef enum
@@ -43,6 +44,13 @@ typedef enum
 	VFS_BLOCK_BUFFER = 1,
 	VFS_NO_BUFFER = 2
 } VFS_BUFFER_MODES;
+
+typedef enum
+{
+	VFS_ACCESS_READ = 0x1,
+	VFS_ACCESS_WRITE = 0x2,
+	VFS_ACCESS_EXECUTE = 0x4
+} VFS_ACCESS_MODES;
 
 #include <sys/types.h>
 #include <stdint.h>
@@ -132,6 +140,8 @@ int vfs_mount_ramdisk(const char* dest, unsigned int mode);
 struct vfs_file* vfs_opendir(const char* path);
 int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id);
 int vfs_stat(struct vfs_file* file, struct stat* stat);
+
+int vfs_mkdir(const char* path, VFS_ACCESS_MODES mode);
 
 #ifdef __cplusplus
 }

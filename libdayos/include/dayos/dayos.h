@@ -9,7 +9,7 @@
 #include "sleep.h"
 
 #include <unistd.h>
-#define DSTUB { debug_printf("[ LIBDAYOS ] Library stub '%s' in process %d\n", __func__, getpid()); }
+#define DSTUB { debug_printf("[ LIBDAYOS ] Library stub '%s' at %s:%d in process %d\n", __func__, __FILE__, __LINE__, getpid()); }
 
 #ifdef __cplusplus
 extern "C" {

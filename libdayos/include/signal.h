@@ -11,11 +11,19 @@
 #define NSIG 23
 #define SIGHUP 24
 #define SIGQUIT 25
+#define SIGTSTP 26
+#define SIGALRM 27
+#define SIGPIPE 28
+#define SIGUSR1 29
+#define SIGUSR2 30
+#define SIGTTIN 31
 
-#define SIG_DFL 0
-#define SIG_IGN 1
-#define SIG_ERR 2
-#define SIG_HOLD 3
+#define SIG_DFL (void (*)(int)) 0
+#define SIG_IGN (void (*)(int)) 1
+#define SIG_ERR (void (*)(int)) 2
+#define SIG_HOLD (void (*)(int)) 3
+#define SIG_BLOCK (void (*)(int)) 4
+#define SIG_UNBLOCK (void (*)(int)) 5
 
 #include "sys/types.h"
 

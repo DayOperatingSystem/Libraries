@@ -17,3 +17,12 @@ int ispunct(int x) { return (isgraph(x) && !isalnum(x)); }*/
 
 #define INLINE
 #include <ctype.h>
+#include <wctype.h>
+#include <wchar.h>
+
+#include <dayos/dayos.h>
+
+int wcwidth(wchar_t wc)
+{
+	DSTUB;
+}

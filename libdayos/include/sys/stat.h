@@ -52,6 +52,14 @@ struct stat
 #define S_IFLNK ((mode_t) VFS_LINK)
 #define S_IFSOCK ((mode_t) VFS_SOCKET)
 
+#define S_ISBLK(m) ((m) & S_IFBLK)
+#define S_ISCHR(m) ((m) & S_IFCHR)
+#define S_ISFIFO(m) ((m) & S_IFIFO)
+#define S_ISREG(m) ((m) & S_IFREG)
+#define S_ISLNK(m) ((m) & S_IFLNK)
+#define S_ISSOCK(m) ((m) & S_IFSOCK)
+#define S_ISDIR(m) ((m) & S_IFDIR)
+
 #ifdef __cplusplus
 extern "C" {
 #endif

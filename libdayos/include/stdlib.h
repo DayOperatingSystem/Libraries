@@ -8,6 +8,7 @@
 #define EXIT_FAILURE -1
 
 #define RAND_MAX INT_MAX
+#define MB_CUR_MAX 1 // FIXME: Only support for ASCII right now...
 
 typedef struct
 {

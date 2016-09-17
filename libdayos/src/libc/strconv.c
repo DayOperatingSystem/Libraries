@@ -1,3 +1,4 @@
+#include <dayos/dayos.h>
 #include <stdlib.h>
 
 #define INLINE static
@@ -5,12 +6,17 @@
 
 long int strtol(const char* str, char** endptr, int base)
 {
-	
+	DSTUB;
+}
+
+long long strtoll(const char* str, char** endptr, int base)
+{
+	DSTUB;
 }
 
 double strtod(const char* str, char** endptr)
 {
-	
+	DSTUB;
 }
 
 int atoi(const char* str)
@@ -43,10 +49,11 @@ int atoi(const char* str)
 
 float atof(const char* str)
 {
-
+	DSTUB;
 }
 
 long atol(const char* str)
 {
+	DSTUB;
 	//return __builtin_atol(str);
 }

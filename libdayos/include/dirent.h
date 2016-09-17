@@ -17,7 +17,8 @@ typedef struct
 {
 	ino_t d_ino;
 	char d_name[256];
-	struct vfs_file file;
+	struct vfs_file* file;
+	ino_t next;
 	struct dirent current;
 } DIR;
 

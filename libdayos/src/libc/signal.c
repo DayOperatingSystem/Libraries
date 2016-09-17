@@ -52,14 +52,14 @@ void (*signal(int sig, void (*func)(int)))(int)
 	}
 	
 	uintptr_t funcptr = (uintptr_t) func;
-	if(funcptr == SIG_DFL)
+	if(funcptr == (int) SIG_DFL)
 	{
 		if(sig < DEFAULT_TABLE_SIZE)
 			signal_table[sig] = default_table[sig];
 		else
 			signal_table[sig] = sig_dfl;
 	}
-	else if(funcptr == SIG_IGN)
+	else if(funcptr == (int) SIG_IGN)
 	{
 		signal_table[sig] = NULL;
 	}
@@ -105,4 +105,16 @@ void init_signals()
 	signal(SIGABRT, SIG_DFL);
 	
 	syscall1(SYSCALL_REGISTER_SIGNAL_HANDLER, (uintptr_t) os_signal_handler);
+}
+
+int sigfillset(sigset_t* set)
+{
+	DSTUB;
+	return -1;
+}
+
+int sigprocmask(int how, const sigset_t* set, sigset_t* oset)
+{
+	DSTUB;
+	return -1;
 }

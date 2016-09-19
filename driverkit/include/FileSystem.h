@@ -26,8 +26,8 @@ public:
 	virtual bool move(file_handle_t dir, const char* path) = 0;
 	virtual bool fstat(file_handle_t handle, struct stat* st) = 0;
 
-	virtual file_handle_t opendir(const char* path) = 0;
-	virtual file_handle_t readdir(file_handle_t dir, size_t idx) = 0;
+	virtual file_handle_t opendir(const char* path, ino_t* id, ino_t* nid) = 0;
+	virtual file_handle_t readdir(file_handle_t dir, size_t idx, struct vfs_file* dest) = 0;
 	virtual bool removeDirectory(file_handle_t file) = 0;
 	virtual file_handle_t createDirectory(const char* path, VFS_OPEN_MODES mode) = 0;
 

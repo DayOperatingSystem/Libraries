@@ -71,13 +71,27 @@ bool IO::FileSystem::handle(message_t& msg)
 
 		case VFS_SIGNAL_OPEN_DIR:
 		{
+			if(opendir(rq->path, &rq->id, &rq->param) == 0)
+				msg.signal = SIGNAL_FAIL;
+			else
+				msg.signal = SIGNAL_OK;
 
+			send_message(&msg, msg.sender);
 		}
 		break;
 
 		case VFS_SIGNAL_READ_DIR:
 		{
+			file_handle_t next_id = rq->param;
+			file_handle_t id = rq->id;
 
+			struct vfs_file* file = (struct vfs_file*) &msg.message;
+			if(readdir(id, next_id, file) == 0)
+				msg.signal = SIGNAL_FAIL;
+			else
+				msg.signal = SIGNAL_OK;
+
+			send_message(&msg, msg.sender);
 		}
 		break;
 		

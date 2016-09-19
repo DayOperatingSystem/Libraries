@@ -10,6 +10,7 @@ int closedir(DIR* dir)
 {
 	free(dir->file);
 	free(dir);
+	return 0;
 }
 
 DIR* opendir(const char* path)
@@ -24,7 +25,7 @@ DIR* opendir(const char* path)
 		return NULL;
 	}
 	
-	rewinddir(dir);	
+	rewinddir(dir);
 	return dir;
 }
 
@@ -49,11 +50,10 @@ long telldir(DIR* dir)
 
 void seekdir(DIR* dir, long off)
 {
-	dir->current.d_ino = off;
+	dir->next = off;
 }
 
 void rewinddir(DIR* dir)
 {
 	dir->next = dir->file->child_nid;
-	//dir->current.d_ino = dir->file.offset;
 }

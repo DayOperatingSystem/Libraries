@@ -258,6 +258,7 @@ struct vfs_file* vfs_opendir(const char* path)
 		}
 
 		file->nid = request->id;
+		file->child_nid = request->param;
 	}
 	
 	free(msg);
@@ -280,6 +281,8 @@ int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id)
 	msg.signal = VFS_SIGNAL_READ_DIR;
 	
 	rq->param = id;
+	rq->id = dir->nid;
+	
 	strcpy(rq->path, dir->path);
 	
 	send_message(&msg, dir->device);

@@ -73,6 +73,22 @@ void test_tolower()
 	ASSERT("Test failed.", tolower('a') == 'a');
 }
 
+void test_sprintf()
+{
+	char buf[32];
+	sprintf(buf, "%d", -123);
+	ASSERT_STRING_EQUALS("-123", buf);
+	
+	sprintf(buf, "%d", 123);
+	ASSERT_STRING_EQUALS("123", buf);
+	
+	sprintf(buf, "%x", 0xABC);
+	ASSERT_STRING_EQUALS("ABC", buf);
+	
+	sprintf(buf, "%s", "asd");
+	ASSERT_STRING_EQUALS("asd", buf);
+}
+
 void run_string_tests()
 {
 	RUN(test_toupper);
@@ -84,4 +100,5 @@ void run_string_tests()
 	RUN(test_strcpy);
 	RUN(test_strncpy);
 	RUN(test_strlen);
+	RUN(test_sprintf);
 }

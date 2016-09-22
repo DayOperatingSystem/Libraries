@@ -32,7 +32,7 @@ extern "C" {
 int vprintf(const char* fmt, va_list ap);
 int printf(const char* fmt, ...);
 
-void putch(int c);
+//int putch(int c);
 int putchar(int character);
 
 int fileno(FILE* stream);

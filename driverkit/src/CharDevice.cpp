@@ -43,7 +43,7 @@ bool IO::CharDevice::handle(message_t& msg)
 	return false;
 }
 
-void IO::CharDevice::putch(char c)
+void IO::CharDevice::putch(char c, bool buffering)
 {
 	// FIXME: Only supports LINE BUFFERING!
 	// Ignore input when nobody is listening
@@ -56,7 +56,7 @@ void IO::CharDevice::putch(char c)
 
 			return;
 		}
-		else if(c == -1)
+		else if(c == -1 || !buffering)
 		{
 			ReadRequest req = m_currentRequests.back();
 			m_currentRequests.pop_back();
@@ -65,7 +65,6 @@ void IO::CharDevice::putch(char c)
 			write_message_stream(&c, 1, req.receiver);
 			return;
 		}
-		
 		
 		m_buffer.push_back(c);
 		if(c == '\n')

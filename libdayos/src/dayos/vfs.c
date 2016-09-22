@@ -319,14 +319,14 @@ int vfs_mkdir(const char* path, VFS_ACCESS_MODES mode)
 	}
 	
 	send_message(msg, pid);
-	while(receive_message(msg, pid) != MESSAGE_RECEIVED) sleep(1);
-	
-	if(msg->signal != SIGNAL_OK)
-	{
-		free(msg);
-		return SIGNAL_FAIL;
-	}
-	
+	if (receive_message_timeout(msg, pid, 100, 5) ==
+				MESSAGE_ERR_RECEIVE ||
+				msg->signal != SIGNAL_OK)
+		{
+			free(msg);
+			return SIGNAL_FAIL;
+		}
+		
 	// Tell the FS driver (in case of a mounted device)
 	if (msgfile->type == VFS_MOUNTPOINT)
 	{
@@ -351,3 +351,30 @@ int vfs_mkdir(const char* path, VFS_ACCESS_MODES mode)
 	free(msg);
 	return SIGNAL_OK;
 }
+
+int vfs_configure(pid_t pid, const char* key, const char* value)
+{
+	message_t* msg = (message_t*) malloc(sizeof(message_t));
+	struct vfs_config_request* rq = (struct vfs_config_request*) &msg->message;
+	
+	strncpy(rq->key, key, sizeof(rq->key));
+	strncpy(rq->value, value, sizeof(rq->value));
+	msg->signal = VFS_SIGNAL_CONFIGURE;
+	
+	send_message(msg, pid);
+	
+	if(receive_message_timeout(msg, pid, 100, 5) == MESSAGE_ERR_RECEIVE)
+		msg->signal = SIGNAL_FAIL;
+	
+	free(msg);
+	return msg->signal;
+}
+
+int vfs_configure_int(pid_t pid, const char* key, int value)
+{
+	char buf[32];
+	sprintf(buf, "%d", value);
+
+	return vfs_configure(pid, key, buf);
+}
+

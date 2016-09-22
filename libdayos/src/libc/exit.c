@@ -3,6 +3,11 @@
 #include <dayos/dayos.h>
 #include <dayos/syscall.h>
 
+void _exit(int status)
+{
+	exit(status);
+}
+
 void exit(int status)
 {
 	fflush(stdout);

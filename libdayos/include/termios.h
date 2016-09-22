@@ -63,6 +63,7 @@ extern "C" {
 #define CS7 0x200
 #define CS8 0x300
 
+#define CSTOPB 0x400
 #define CREAD 0x800
 #define PARENB 0x1000
 #define PARODD 0x2000
@@ -85,6 +86,10 @@ extern "C" {
 #define B9600 9600
 #define B19200 19200
 #define B38400 38400
+
+#define TCIFLUSH 0x100
+#define TCIOFLUSH 0x200
+#define TCOFLUSH 0x300
 
 typedef uint32_t cc_t;
 typedef uint32_t speed_t;

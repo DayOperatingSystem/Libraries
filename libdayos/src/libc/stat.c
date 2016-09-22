@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <dayos/dayos.h>
 #include <dayos/vfs.h>
+#include <stdlib.h>
 
 extern FILE* fd2file(int fd); // From fcntl.c
 
@@ -24,10 +25,20 @@ int fchmod(int fildes, mode_t mode)
 
 int stat(const char* name, struct stat* stat)
 {
-	int fd = open(name, O_RDONLY);
+	/*int fd = open(name, O_RDONLY);
 	if(fd < 0) return -1;
 
-	return fstat(fd, stat);
+	return fstat(fd, stat);*/
+	
+	struct vfs_file* f = vfs_open(name, VFS_MODE_RO);
+	if(!f && !(f = vfs_opendir(name)))
+	{
+		return -1;
+	}
+
+	vfs_stat(f, stat);
+	free(f);
+	return 0;
 }
 
 int chdir(const char* path)

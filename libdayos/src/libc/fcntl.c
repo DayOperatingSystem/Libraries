@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 #include <dayos/dayos.h>
 
 static const int vector_alloc_step = 16; 
@@ -96,11 +98,35 @@ FILE* fd2file(int fd)
 	return vector_array[fd];
 }
 
+int fdvalid(int fd)
+{
+	if(fd < 0 || fd > vector_size)
+	{
+		errno = EBADF;
+		return 0;
+	}
+	
+	return 1;
+}
+
 int isatty(int fd)
 {
 	DSTUB;
 	return 1;
 }
+
+char* ttyname(int fd)
+{
+	static char data[256];
+	DSTUB;
+
+	if(!fdvalid(fd))
+		return NULL;
+	
+	strncpy(data, vector_array[fd]->native_file.path, sizeof(data));
+	return data;
+}
+
 
 int access(const char* path, int mode)
 {

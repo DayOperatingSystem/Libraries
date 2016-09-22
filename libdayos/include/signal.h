@@ -17,6 +17,7 @@
 #define SIGUSR1 29
 #define SIGUSR2 30
 #define SIGTTIN 31
+#define SIGKILL 32
 
 #define SIG_DFL (void (*)(int)) 0
 #define SIG_IGN (void (*)(int)) 1
@@ -24,6 +25,8 @@
 #define SIG_HOLD (void (*)(int)) 3
 #define SIG_BLOCK (void (*)(int)) 4
 #define SIG_UNBLOCK (void (*)(int)) 5
+
+#define SIG_SETMASK 33
 
 #include "sys/types.h"
 

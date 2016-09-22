@@ -5,3 +5,9 @@ struct passwd* getpwnam(const char* name)
 {
 	DSTUB;
 }
+
+char* getlogin()
+{
+	DSTUB;
+	return "root";
+}

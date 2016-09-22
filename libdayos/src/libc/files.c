@@ -445,6 +445,12 @@ int vfprintf(FILE* stream, const char* fmt, va_list ap)
 				case 'l':
 					switch(fmt[1])
 					{
+						case 'u':
+							fmt++;
+							n = va_arg(ap, unsigned long int);
+							ret += fputn(n, 10, stream);
+							break;
+							
 						case 'd':
 							fmt++;
 							n = va_arg(ap, long int);
@@ -484,9 +490,9 @@ out:
 	return ret;
 }
 
-void putch(int c)
+int putch(int c)
 {
-	fputc(c, stdout);
+	return fputc(c, stdout);
 }
 
 int putchar(int c)
@@ -610,7 +616,7 @@ void rewind(FILE* stream)
 
 int scanf(const char* format, ...)
 {
-	debug_printf("STUB: %s\n", __func__);
+	DSTUB;
 	return 0;
 }
 

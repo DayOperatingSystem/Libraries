@@ -123,29 +123,52 @@ out:
 	return ret;
 }
 
-int sputn(char *s, int x, int base)
+static void reverse_memory(char* begin, char* end)
 {
-	char buf[65];
-	const char *digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	char *p;
+	if(!begin || !end)
+		return;
 
-	if (base > 36)
+	if(begin > end)
 	{
-		return 0;
+		char* tmp = begin;
+		begin = end;
+		end = tmp;
 	}
 
-	memset(buf, 0, 64);
-
-	p = buf + 64;
-	*p = '\0';
-	do
+	while(begin < end)
 	{
-		*--p = digits[x % base];
-		x /= base;
-	} while (x);
+		char tmp = *begin;
+		*begin = *end;
+		*end = tmp;
 
-	strcpy(s, p);
-	return strlen(p);
+		begin++;
+		end--;
+	}
+}
+
+static const char* codes = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+int itoa(int num, char* string, unsigned int base)
+{
+	unsigned int i = 0;
+	int is_neg = 0;
+	if(base == 10 && num < 0)
+		is_neg = 1;
+	
+	if(is_neg)
+	{
+		string[i++]='-';
+		num *=-1;
+	}
+	
+	for(; num; )
+	{
+		string[i++] = codes[num%base];
+		num = num/base;
+	}
+	
+	string[i] = '\0';
+	reverse_memory((is_neg) ? string + 1 : string, string + i - 1);
+	return i;
 }
 
 int sprintf(char *dest, const char *fmt, ...)
@@ -198,7 +221,7 @@ int vsprintf(char *dest, const char *fmt, va_list ap)
 				case 'd':
 				case 'u':
 					n = va_arg(ap, unsigned long int);
-					len = sputn(dest, n, 10);
+					len = itoa(n, dest, 10);
 
 					dest += len;
 					ret += len;
@@ -206,7 +229,7 @@ int vsprintf(char *dest, const char *fmt, va_list ap)
 				case 'x':
 				case 'p':
 					n = va_arg(ap, unsigned long int);
-					len = sputn(dest, n, 16);
+					len = itoa(n, dest, 16);
 
 					dest += len;
 					ret += len;
@@ -217,7 +240,7 @@ int vsprintf(char *dest, const char *fmt, va_list ap)
 						case 'd':
 							fmt++;
 							n = va_arg(ap, long int);
-							len = sputn(dest, n, 10);
+							len = itoa(n, dest, 10);
 
 							dest += len;
 							ret += len;
@@ -284,7 +307,7 @@ int vsnprintf(char *dest, size_t size, const char *fmt, va_list ap)
 				case 'd':
 				case 'u':
 					n = va_arg(ap, unsigned long int);
-					len = sputn(dest, n, 10);
+					len = itoa(n, dest, 10);
 
 					dest += len;
 					ret += len;
@@ -292,7 +315,7 @@ int vsnprintf(char *dest, size_t size, const char *fmt, va_list ap)
 				case 'x':
 				case 'p':
 					n = va_arg(ap, unsigned long int);
-					len = sputn(dest, n, 16);
+					len = itoa(n, dest, 16);
 
 					dest += len;
 					ret += len;
@@ -303,7 +326,7 @@ int vsnprintf(char *dest, size_t size, const char *fmt, va_list ap)
 						case 'd':
 							fmt++;
 							n = va_arg(ap, long int);
-							len = sputn(dest, n, 10);
+							len = itoa(n, dest, 10);
 
 							dest += len;
 							ret += len;

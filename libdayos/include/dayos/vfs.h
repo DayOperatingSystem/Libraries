@@ -23,7 +23,8 @@ typedef enum
 	VFS_SIGNAL_WRITE = 7,
 	VFS_SIGNAL_STAT = 8,
 	VFS_SIGNAL_IOCTL = 9,
-	VFS_SIGNAL_CREATE_DIRECTORY = 10
+	VFS_SIGNAL_CONFIGURE = 10,
+	VFS_SIGNAL_CREATE_DIRECTORY = 11
 } VFS_SIGNALS;
 
 typedef enum
@@ -72,6 +73,15 @@ struct vfs_request
 	uint32_t offset;
 	uint32_t magic;
 	uint32_t id;
+};
+
+/**
+ * @brief Solely used with the VFS_SIGNAL_CONFIGURE signal to transmit key/value pairs.
+ */
+struct vfs_config_request
+{
+	int8_t key[MESSAGE_STRING_SIZE / 2];
+	int8_t value[MESSAGE_STRING_SIZE / 2];
 };
 
 struct vfs_file
@@ -142,6 +152,9 @@ int vfs_readdir(struct vfs_file* dir, struct vfs_file* dest, int id);
 int vfs_stat(struct vfs_file* file, struct stat* stat);
 
 int vfs_mkdir(const char* path, VFS_ACCESS_MODES mode);
+
+int vfs_configure(pid_t pid, const char* key, const char* value);
+int vfs_configure_int(pid_t pid, const char* key, int value);
 
 #ifdef __cplusplus
 }

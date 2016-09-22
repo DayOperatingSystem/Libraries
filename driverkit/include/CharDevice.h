@@ -36,7 +36,7 @@ public:
 
 	size_t getBufferSize() { return m_buffer.size(); }
 
-	virtual void putch(char c);
+	virtual void putch(char c, bool buffering);
 	virtual size_t write(void* src, size_t size) = 0;
 };
 }

@@ -32,6 +32,7 @@ pid_t getppid();
 int chdir(const char* path);
 int rmdir(const char* path);
 int isatty(int fd);
+char* ttyname(int fd);
 
 #ifdef __cplusplus
 }
